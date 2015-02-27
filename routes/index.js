@@ -1,11 +1,13 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express'),
+    router  = express.Router(),
+    fs      = require('fs'),
+    moment  = require('moment');
 
 /* GET home page. */
 router.get('/', function (req, res) {
-    res.render('index', {
-        title: 'Engine Temperature'
-    });
+    res.send(fs.readFileSync('./views/index.html', {
+        encoding: 'utf8'
+    }));
 });
 
 /* GET temperature */
@@ -26,16 +28,27 @@ module.exports = router;
 
 function saveTemp(temp, time)
 {
-    console.log({
+    fs.writeFile(getFileName(), JSON.stringify({
         temp: temp,
         time: time
+    }), function(err) {
+        if (err) {
+            console.log(err);
+        }
     });
 }
 
 function getTemp()
 {
+    var data = JSON.parse(fs.readFileSync(getFileName()));
+
     return {
-        temp: 33,
-        time: 1425036181
+        temp: data.temp,
+        date: moment(data.time, 'X').format('HH:mm:ss DD.MM.YYYY')
     };
+}
+
+function getFileName()
+{
+    return __dirname + '/../data/temp';
 }

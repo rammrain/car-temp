@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Engine Temperature</title>
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+    <div class="block">
+
+        <div class="centered">
+            <p class="temp"><span>-</span>&deg;</p>
+            <p class="date"></p>
+        </div>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(window).resize(function () {
+            $('.block').height($(window).height());
+        }).resize();
+
+        getData();
+
+        function getData()
+        {
+            $.get('/temp', function (data) {
+                $('.temp > span').html(data.temp);
+                $('.date').html(data.date);
+
+                setTimeout(getData, 5000);
+            });
+        }
+    </script>
+</body>
+</html>
