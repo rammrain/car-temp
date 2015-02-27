@@ -17,8 +17,6 @@ router.get('/temp', function(req, res) {
 
 /* POST temperature */
 router.post('/temp', function(req, res) {
-    console.log(req.body);
-
     saveTemp(req.body.temp, req.body.time);
 
     res.json({
